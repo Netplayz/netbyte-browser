@@ -2,7 +2,6 @@
 # ═══════════════════════════════════════════════════════════
 #   NetByte Browser — Install & Launch Script
 # ═══════════════════════════════════════════════════════════
-set -e
 
 CYAN='\033[0;36m'
 GREEN='\033[0;32m'
@@ -27,9 +26,11 @@ if ! command -v node &>/dev/null; then
   exit 1
 fi
 
-NODE_VER=$(node -e "process.exit(parseInt(process.versions.node))")
-if [ $? -lt 18 ] 2>/dev/null; then
+NODE_VER=$(node -e "console.log(parseInt(process.versions.node))")
+if [ "$NODE_VER" -lt 18 ]; then
   echo -e "${YELLOW}[WARN]${NC} Node.js 18+ recommended. Detected: $(node --version)"
+else
+  echo -e "${GREEN}[OK]${NC}  Node.js $(node --version)"
 fi
 
 # ── Check npm ──────────────────────────────────────────────
@@ -41,13 +42,18 @@ fi
 echo -e "${GREEN}[1/3]${NC} Installing dependencies…"
 npm install --no-audit --no-fund
 
+if [ $? -ne 0 ]; then
+  echo -e "${RED}[ERROR]${NC} npm install failed. Check the output above."
+  exit 1
+fi
+
 echo ""
 echo -e "${GREEN}[2/3]${NC} Dependency check:"
 node -e "
   const mods = ['electron', '@cliqz/adblocker-electron', 'cross-fetch'];
   mods.forEach(m => {
-    try { require.resolve(m); console.log('  ✓', m); }
-    catch { console.log('  ✗', m, '(optional — fallback blocker will be used)'); }
+    try { require.resolve(m); console.log('  \u2713', m); }
+    catch { console.log('  \u2717', m, '(optional — fallback blocker will be used)'); }
   });
 "
 
