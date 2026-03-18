@@ -1,0 +1,38 @@
+{
+  "name": "netbyte-browser",
+  "version": "1.0.0",
+  "description": "NetByte Browser — Privacy-first Chromium browser with built-in ad blocking and DuckDuckGo",
+  "main": "main.js",
+  "author": "NetByte / Netplayz — ByteForge Open Source Lab",
+  "license": "GPL-3.0",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder",
+    "build:linux": "electron-builder --linux",
+    "build:win": "electron-builder --win",
+    "build:mac": "electron-builder --mac"
+  },
+  "dependencies": {
+    "@cliqz/adblocker-electron": "^1.26.0",
+    "cross-fetch": "^4.0.0"
+  },
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.0.0"
+  },
+  "build": {
+    "appId": "dev.netbyte.browser",
+    "productName": "NetByte Browser",
+    "icon": "assets/icon",
+    "linux": {
+      "target": ["deb", "AppImage"],
+      "category": "Network"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "mac": {
+      "target": "dmg"
+    }
+  }
+}
